@@ -1,8 +1,9 @@
 #pragma once
-#define TILE_SIZE 32
-#define H 13
-#define W 15
-#define K 2
+#include "SFML\Graphics.hpp"
+#define TILE_SIZE 64
+#define H 14
+#define W 19
+
 
 using namespace sf;
 
@@ -23,5 +24,3 @@ public:
 	void setTile(char ch, int i, int j);
 	char getTile(int i, int j);
 };
-
-//enum TileType { BLOCK, GROUND, BRICKS, LEAVES };
