@@ -2,7 +2,7 @@
 #include "SFML\Graphics.hpp"
 #define TILE_SIZE 64
 #define H 14
-#define W 19
+#define WIDTH 25
 
 
 using namespace sf;
@@ -11,13 +11,10 @@ class Map
 {
 private:
 	String  map_arr[H];
-	Texture Block;
-	Texture Ground;
-	Texture Bricks;
-	Texture Leaves;
-	Sprite tile;
+	Texture mapTexture;
+	Sprite sprite;
 public:
-	Map( String map[H] );
+	Map(String map_arr[H], Texture &map);
 	~Map();
 	void draw( RenderWindow &window);
 	void drawLeaves( RenderWindow &window);

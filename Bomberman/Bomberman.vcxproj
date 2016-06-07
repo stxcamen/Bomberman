@@ -117,6 +117,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="cScreen.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -124,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="cScreen.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />
