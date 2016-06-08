@@ -1,5 +1,10 @@
 #pragma once
 #include "Player.h"
+#define INIT_EX_POWER 1
+#define INIT_SPEED 1.5
+#define INIT_BOMB_TIMER 1800.0
+#define INIT_RELOADING_TIME 3000.0
+#define ANIMATION_SPEED 0.005
 #define GO_LEFT IntRect(48 * (int)currentFrame, 64, 48, 60)
 #define GO_RIGHT IntRect(48 + 48 * (int)currentFrame, 64, -48, 60)
 #define GO_UP IntRect(48 * (int)currentFrame, 126, 48, 62)
@@ -17,11 +22,43 @@ Player::Player(Texture &mighty, int x, int y)
 {
 	isWon = false;
 	isAlive = true;
-	lastPlanted = -diffTime;
-	dx = dy = 0;
-	currentFrame = 0;
-	playerSprite = Sprite( mighty, GO_DOWN );
+	speed = INIT_SPEED;
+	explosionPower = INIT_EX_POWER;
+	reloadingTime = INIT_RELOADING_TIME;
+	bombTimer = INIT_BOMB_TIMER;
+	lastPlanted = -reloadingTime;
+	lastBomb = FloatRect(0, 0, 0, 0);
+	dx = dy = 0.0;
+	currentFrame = 0.0;
+	playerSprite = Sprite(mighty, GO_DOWN);
 	physRect = FloatRect(x * TILE_SIZE + 14, y * TILE_SIZE + 42, 20, 16);
+}
+
+void Player::setPowerUp(Map &map, char mapTile)
+{
+	if(mapTile == '6')
+	{
+		explosionPower = INIT_EX_POWER;
+		speed = INIT_SPEED;
+		bombTimer = INIT_BOMB_TIMER;
+		reloadingTime = INIT_RELOADING_TIME;
+	}
+	else if (mapTile == '5')
+		speed = INIT_SPEED;
+	else if (mapTile == '4')
+		speed += INIT_SPEED / 2;
+	else if (mapTile == '3')
+		explosionPower += 1;
+	else if (mapTile = '2')
+	{
+		if (reloadingTime > 500.0)
+			reloadingTime -= 500.0;
+	}
+	else if (mapTile == '1')
+	{
+		if (bombTimer > 1000.0)
+			bombTimer -= 500.0;
+	}
 }
 
 void Player::bombCollision(Map &map)
@@ -35,14 +72,20 @@ void Player::bombCollision(Map &map)
 
 void Player::collision(Map &map, bool enemyLose)
 {
+	char mapTile;
+
 	if (enemyLose)
 	{
 		isWon = true;
 		currentFrame = 0;
+		speed = INIT_SPEED;
 	}
 	else for (int i = physRect.top / TILE_SIZE; i < (physRect.top + physRect.height) / TILE_SIZE; i++)
 		for (int j = physRect.left / TILE_SIZE; j < (physRect.left + physRect.width) / TILE_SIZE; j++)
-			if ((map.getTile(i, j) == 'D') || (map.getTile(i, j) == 'B') || (map.getTile(i, j) == 'Q'))
+		{
+			mapTile = map.getTile(i, j);
+
+			if ((mapTile == 'D') || (mapTile == 'B') || (mapTile == 'Q'))
 			{
 				if (dx > 0)
 					physRect.left = j * TILE_SIZE - physRect.width;
@@ -53,18 +96,24 @@ void Player::collision(Map &map, bool enemyLose)
 				else if (dy < 0)
 					physRect.top = TILE_SIZE * (i + 1);
 			}
-			else if ((map.getTile(i, j) == 'F') || (map.getTile(i, j) == 'E'))
+			else if (mapTile >= '1' && mapTile <= '6')
+			{
+				map.setTile(' ', i, j);
+				setPowerUp(map, mapTile);
+			}
+			else if ((mapTile == 'F') || (mapTile == 'E'))
 			{
 				isAlive = false;
 				currentFrame = 0;
+				speed = INIT_SPEED;
 			}
-	
+		}
 	bombCollision(map);
 }
 
 void Player::update(float dt, Map &map, bool enemyLose)
 {
-	currentFrame += 0.005 * dt;
+	currentFrame += ANIMATION_SPEED * speed * dt;
 
 	if (isWon)
 	{
@@ -78,7 +127,7 @@ void Player::update(float dt, Map &map, bool enemyLose)
 	}
 	else if (dx)
 	{
-		physRect.left += dx * dt;
+		physRect.left += dx * speed * dt;
 
 		if (currentFrame > RL_FRAMES)
 			currentFrame -= RL_FRAMES;
@@ -90,14 +139,14 @@ void Player::update(float dt, Map &map, bool enemyLose)
 	}
 	else if (dy > 0)
 	{
-		physRect.top += dy * dt;
+		physRect.top += dy * speed * dt;
 		if (currentFrame > DOWN_FRAMES)
 			currentFrame -= DOWN_FRAMES;
 		playerSprite.setTextureRect(GO_DOWN);
 	}
 	else if (dy < 0)
 	{
-		physRect.top += dy * dt;
+		physRect.top += dy * speed * dt;
 		if (currentFrame > UP_FRAMES)
 			currentFrame -= UP_FRAMES;
 		playerSprite.setTextureRect(GO_UP);
@@ -110,45 +159,30 @@ void Player::update(float dt, Map &map, bool enemyLose)
 	dx = dy = 0;
 }
 
-void Player::bombPlanted(Map &map, float time_now)
+void Player::bombPlanted(Map &map, float timeNow)
 {
-	lastPlanted = time_now;
+	lastPlanted = timeNow;
 	lastBomb = FloatRect(getPlayerX() * TILE_SIZE, getPlayerY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 }
 
-void Player::set_dx(float v)
+void Player::setdx(float v)
 {
 	dx = v;
 }
 
-void Player::set_dy(float v)
+void Player::setdy(float v)
 {
 	dy = v;
 }
 
-void Player::setExPower(int exPower)
+bool Player::isReloaded(float timeNow)
 {
-	explosionPower = exPower;
+	return ((timeNow - lastPlanted) >= reloadingTime) &&  !physRect.intersects(lastBomb) && isAlive;
 }
 
-void Player::setDiffTime( float diff_time)
+float Player::getBombTimer()
 {
-	diffTime = diff_time;
-}
-
-bool Player::isReloaded(float time_now)
-{
-	return ((time_now - lastPlanted) >= diffTime) &&  !physRect.intersects(lastBomb) && isAlive;
-}
-
-void Player::setBombDiffTime( float bomb_difftime)
-{
-	bombDiffTime = bomb_difftime;
-}
-
-float Player::getBombDiffTime()
-{
-	return bombDiffTime;
+	return bombTimer;
 }
 
 int Player::getExPower()

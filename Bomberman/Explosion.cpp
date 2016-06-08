@@ -3,16 +3,16 @@
 #define MINUS_X 0
 #define PLUS_Y 384
 #define MINUS_Y 256
-#define LONG_FIRE IntRect(64 + dir, 0, 64, 64) 
-#define FIRE_END IntRect(128 + dir, 0, 64, 64)
-#define CROSS_FIRE IntRect(0, 0, 64, 64)
-#define FIRE_BRICK IntRect(0, 0, 64, 64)
+#define LONG_FIRE IntRect(TILE_SIZE + dir, 0, TILE_SIZE, TILE_SIZE) 
+#define FIRE_END IntRect(2 * TILE_SIZE + dir, 0, TILE_SIZE, TILE_SIZE)
+#define CROSS_FIRE IntRect(0, 0, TILE_SIZE, TILE_SIZE)
+#define FIRE_BRICK IntRect(0, 0, TILE_SIZE, TILE_SIZE)
 
 
-Explosion::Explosion(Texture &brick, Texture &fire, Map &map, vector <Bomb*> &bombVector, int exPower, float time_now, int x, int y)
+Explosion::Explosion(Texture &brick, Texture &fire, Map &map, vector <Bomb*> &bombVector, int exPower, float timeNow, int x, int y)
 {
 	this->exPower = exPower;
-	startTime = time_now;
+	startTime = timeNow;
 	spriteVector.clear();
 	spriteVector.push_back(new Sprite(fire, CROSS_FIRE));
 	spriteVector.back()->setPosition(x * TILE_SIZE, y * TILE_SIZE);
@@ -46,7 +46,7 @@ bool Explosion::fireSpread(Texture &brick, Texture &fire, Map &map, vector <Bomb
 			map.setTile('E', y , x );
 			return true;
 		}
-		else if (ch == 'D')
+		else if (ch == 'D' || (ch >= '1' && ch <= '6'))
 		{
 			spriteVector.push_back(new Sprite(brick, FIRE_BRICK));
 			spriteVector.back()->setPosition(x * TILE_SIZE, y * TILE_SIZE);
@@ -66,24 +66,24 @@ bool Explosion::fireSpread(Texture &brick, Texture &fire, Map &map, vector <Bomb
 			return false;
 }
 
-void Explosion::update( float time_now )
+void Explosion::update( float timeNow )
 {
 	IntRect tempRect;
-	if((time_now - startTime) >= (3.0 * exTime / 4) )
+	if((timeNow - startTime) >= (3.0 * exTime / 4) )
 		for (spriteIt = spriteVector.begin(); spriteIt != spriteVector.end(); spriteIt++)
 		{
 			tempRect = (*spriteIt)->getTextureRect();
 			tempRect.top = 3 * TILE_SIZE;
 			(*spriteIt)->setTextureRect( tempRect );
 		}
-	else if((time_now - startTime) >= (2.0 * exTime / 4))
+	else if((timeNow - startTime) >= (2.0 * exTime / 4))
 		for (spriteIt = spriteVector.begin(); spriteIt != spriteVector.end(); spriteIt++)
 		{
 			tempRect = (*spriteIt)->getTextureRect();
 			tempRect.top = 2 * TILE_SIZE;
 			(*spriteIt)->setTextureRect( tempRect );
 		}
-	else if ((time_now - startTime) >= (exTime / 4.0))
+	else if ((timeNow - startTime) >= (exTime / 4.0))
 		for (spriteIt = spriteVector.begin(); spriteIt != spriteVector.end(); spriteIt++)
 		{
 			tempRect = (*spriteIt)->getTextureRect();
@@ -98,13 +98,41 @@ void Explosion::draw(RenderWindow &window)
 		window.draw(**spriteIt);
 }
 
-bool Explosion::isInactive(Map &map, float time_now)
+bool Explosion::isInactive(Map &map, float timeNow)
 {
-	if ((time_now - startTime) >= exTime) 
+	if ((timeNow - startTime) >= exTime) 
 	{
 		for (spriteIt = spriteVector.begin(); spriteIt != spriteVector.end(); spriteIt++)
-			map.setTile(' ', (*spriteIt)->getPosition().y / TILE_SIZE, (*spriteIt)->getPosition().x / TILE_SIZE);
+			if(map.getTile((*spriteIt)->getPosition().y / TILE_SIZE, (*spriteIt)->getPosition().x / TILE_SIZE) == 'F')
+				map.setTile(powerUpGenerate(), (*spriteIt)->getPosition().y / TILE_SIZE, (*spriteIt)->getPosition().x / TILE_SIZE);
+			else
+				map.setTile(' ', (*spriteIt)->getPosition().y / TILE_SIZE, (*spriteIt)->getPosition().x / TILE_SIZE);
 		return true;
 	}
 	return false;
+}
+
+char Explosion::powerUpGenerate()
+{
+	int x = rand() % 25;
+	if (x >= 8)
+		return ' ';
+	else if (x > 4 && x < 8)
+		return '6';
+	else if (x == 4)
+		return '5';
+	else if (x == 3)
+		return '4';
+	else if (x == 2)
+		return '3';
+	else if (x == 1)
+		return '2';
+	else if (x == 0)
+		return '1';
+	
+	return ' ';
+}
+
+Explosion::~Explosion()
+{
 }

@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "Bomb.h"
 #include "Explosion.h"
+//#include "SFML\System.hpp"
 
 
 using namespace sf;
@@ -29,7 +30,7 @@ using namespace std;
 	"BBBBBBBBBBBBBBBBBBBBBBBBB",
 };*/
 
-String mapClassic[H] = {
+String mapClassic[HEIGHT] = {
 	"                         ",
 	"BBBBBBBBBBBBBBBBBBBBBBBBB",
 	"B  DDDDDDDDDDDDDDDDDDD  B",
@@ -50,7 +51,7 @@ int main()
 {
 	Event event;
 
-	RenderWindow window(VideoMode::getDesktopMode(), "Bomberman", Style::Fullscreen);
+	RenderWindow window(VideoMode::getDesktopMode(), "Bomberman");
 
 	Texture pinkMighty, yellowMighty, fire, fireBrick, bomb, map;
 	pinkMighty.loadFromFile("textures\\Mighty pink.png");
@@ -71,73 +72,75 @@ int main()
 	vector <Explosion*> ::iterator exIt;
 	exVector.clear();
 
-	clock_t start_time = clock(), now = clock(), was = clock();
+	clock_t startTime = clock(), now = clock(), was = clock();
+	float timeNow, dt;
 
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
 			if (event.type == Event::Closed)
 				window.close();
+
 		was = now;
 		now = clock();
-		float time_now = 1000.0 * (now - start_time) / CLOCKS_PER_SEC;
-		float dt = 3000.0 * (now - was) / CLOCKS_PER_SEC;
+		timeNow = 1000.0 * (now - startTime) / CLOCKS_PER_SEC;
+		dt = 1000.0 * (now - was) / CLOCKS_PER_SEC;
 
-
-		if ((Keyboard::isKeyPressed(Keyboard::LShift) && (*firstPlayer).isReloaded(time_now))
-			&& !((*firstPlayer).getPlayerX() == (*secondPlayer).getPlayerX() && (*firstPlayer).getPlayerY() == (*secondPlayer).getPlayerY()))
+		if (!((*firstPlayer).getPlayerX() == (*secondPlayer).getPlayerX() && (*firstPlayer).getPlayerY() == (*secondPlayer).getPlayerY()))
 		{
-			(*firstPlayer).bombPlanted(*classicMap, time_now);
-			bombVector.push_back(new Bomb(bomb, (*firstPlayer).getExPower(), time_now, (*firstPlayer).getBombDiffTime(), (*firstPlayer).getPlayerX(), (*firstPlayer).getPlayerY()));
-		}
+			if (Keyboard::isKeyPressed(Keyboard::LShift) && (*firstPlayer).isReloaded(timeNow))
+			{
+				(*firstPlayer).bombPlanted(*classicMap, timeNow);
+				bombVector.push_back(new Bomb(bomb, (*firstPlayer).getExPower(), timeNow, (*firstPlayer).getBombTimer(), (*firstPlayer).getPlayerX(), (*firstPlayer).getPlayerY()));
+			}
 
-		if (Keyboard::isKeyPressed(Keyboard::RShift) && (*secondPlayer).isReloaded(time_now)
-			&& !((*firstPlayer).getPlayerX() == (*secondPlayer).getPlayerX() && (*firstPlayer).getPlayerY() == (*secondPlayer).getPlayerY()))
-		{
-			(*secondPlayer).bombPlanted(*classicMap, time_now);
-			bombVector.push_back(new Bomb(bomb, (*secondPlayer).getExPower(), time_now, (*secondPlayer).getBombDiffTime(), (*secondPlayer).getPlayerX(), (*secondPlayer).getPlayerY()));
+			if (Keyboard::isKeyPressed(Keyboard::RShift) && (*secondPlayer).isReloaded(timeNow))
+			{
+				(*secondPlayer).bombPlanted(*classicMap, timeNow);
+				bombVector.push_back(new Bomb(bomb, (*secondPlayer).getExPower(), timeNow, (*secondPlayer).getBombTimer(), (*secondPlayer).getPlayerX(), (*secondPlayer).getPlayerY()));
+			}
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::A))
-			(*firstPlayer).set_dx(-0.1);
+			(*firstPlayer).setdx(-0.1);
 		else if (Keyboard::isKeyPressed(Keyboard::D))
-			(*firstPlayer).set_dx(0.1);
+			(*firstPlayer).setdx(0.1);
 		else if (Keyboard::isKeyPressed(Keyboard::W))
-			(*firstPlayer).set_dy(-0.1);
+			(*firstPlayer).setdy(-0.1);
 		else if (Keyboard::isKeyPressed(Keyboard::S))
-			(*firstPlayer).set_dy(0.1);
+			(*firstPlayer).setdy(0.1);
 
 		if (Keyboard::isKeyPressed(Keyboard::Left))
-			(*secondPlayer).set_dx(-0.1);
+			(*secondPlayer).setdx(-0.1);
 		else if (Keyboard::isKeyPressed(Keyboard::Right))
-			(*secondPlayer).set_dx(0.1);
+			(*secondPlayer).setdx(0.1);
 		else if (Keyboard::isKeyPressed(Keyboard::Up))
-			(*secondPlayer).set_dy(-0.1);
+			(*secondPlayer).setdy(-0.1);
 		else if (Keyboard::isKeyPressed(Keyboard::Down))
-			(*secondPlayer).set_dy(0.1);
+			(*secondPlayer).setdy(0.1);
 
 		(*firstPlayer).update(dt, *classicMap, (*secondPlayer).isLose());
 		(*secondPlayer).update(dt, *classicMap, (*firstPlayer).isLose());
 
 		bombIt = bombVector.begin();
 		while (bombIt != bombVector.end())
-			if ((*bombIt)->isExplode(time_now))
+			if ((*bombIt)->isExplode(timeNow))
 			{
-				exVector.push_back(new Explosion(fireBrick, fire, *classicMap, bombVector, (*bombIt)->getExPower(), time_now, (*bombIt)->getBombX(), (*bombIt)->getBombY()));
+				exVector.push_back(new Explosion(fireBrick, fire, *classicMap, bombVector, (*bombIt)->getExPower(), timeNow, (*bombIt)->getBombX(), (*bombIt)->getBombY()));
 				bombIt = bombVector.erase(bombIt);
 			}
 			else
 				bombIt++;
 
 		for (exIt = exVector.begin(); exIt != exVector.end(); exIt++)
-			if ((*exIt)->isInactive(*classicMap, time_now))
+			if ((*exIt)->isInactive(*classicMap, timeNow))
 				(*exIt)->~Explosion();
 
 		for (bombIt = bombVector.begin(); bombIt != bombVector.end(); bombIt++)
-			(*bombIt)->update(time_now);
+			(*bombIt)->update(timeNow);
 
 		for (exIt = exVector.begin(); exIt != exVector.end(); exIt++)
-			(*exIt)->update(time_now);
+			(*exIt)->update(timeNow);
 
 		(*classicMap).draw(window);
 

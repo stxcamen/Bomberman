@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML\Graphics.hpp"
 #define TILE_SIZE 64
-#define H 14
+#define HEIGHT 14
 #define WIDTH 25
 
 
@@ -10,11 +10,11 @@ using namespace sf;
 class Map
 {
 private:
-	String  map_arr[H];
+	String  mapArray[HEIGHT];
 	Texture mapTexture;
 	Sprite sprite;
 public:
-	Map(String map_arr[H], Texture &map);
+	Map(String mapArray[HEIGHT], Texture &map);
 	~Map();
 	void draw( RenderWindow &window);
 	void drawLeaves( RenderWindow &window);

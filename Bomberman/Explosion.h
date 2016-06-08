@@ -18,9 +18,11 @@ private:
 	float startTime;
 	const float exTime = 512.0;
 	bool fireSpread(Texture &brick, Texture &fire, Map &map, vector <Bomb*> &bombVector, int dir, int x, int y, int i);
+	char powerUpGenerate();
 public:
-	Explosion(Texture &brick, Texture &fire, Map &map, vector <Bomb*> &bombVector, int exPower, float time_now, int x, int y);
-	void update( float time_now );
+	Explosion(Texture &brick, Texture &fire, Map &map, vector <Bomb*> &bombVector, int exPower, float timeNow, int x, int y);
+	void update( float timeNow );
 	void draw(RenderWindow &window);
-	bool isInactive(Map &map, float time_now);
+	bool isInactive(Map &map, float timeNow);
+	~Explosion();
 };

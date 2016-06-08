@@ -6,31 +6,31 @@
 #define THIRD_FRAME IntRect(100, 0, 50, 44)
 
 
-Bomb::Bomb(Texture &bomb, int exPower, float timePlanted, float diffTime, int x, int y)
+Bomb::Bomb(Texture &bomb, int exPower, float timePlanted, float bombTimer, int x, int y)
 {
 	this->exPower = exPower;
 	sprite = Sprite(bomb, FIRST_FRAME);
 	sprite.setPosition(TILE_SIZE * x, TILE_SIZE * y);
-	diff_time = diffTime;
-	time_planted = timePlanted;
+	this->bombTimer = bombTimer;
+	this->timePlanted = timePlanted;
 }
 
-bool Bomb::isExplode(float time_now)
+bool Bomb::isExplode(float timeNow)
 {
-	return (time_now - time_planted) >= diff_time;
+	return (timeNow - timePlanted) >= bombTimer;
 }
 
-void Bomb::update(float time_now) 
+void Bomb::update(float timeNow) 
 {
-	if ((time_now - time_planted) >= 2.0 * diff_time / 3 )
+	if ((timeNow - timePlanted) >= 2.0 * bombTimer / 3 )
 		sprite.setTextureRect(THIRD_FRAME);
-	else if ((time_now - time_planted) >= diff_time / 3.0)
+	else if ((timeNow - timePlanted) >= bombTimer / 3.0)
 		sprite.setTextureRect(SECOND_FRAME);
 }
 
 void Bomb::explode()
 {
-	time_planted = -diff_time;   
+	timePlanted = -bombTimer;   
 }
 
 int Bomb::getExPower()
