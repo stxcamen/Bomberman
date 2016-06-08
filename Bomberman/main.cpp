@@ -119,8 +119,8 @@ int main()
 		else if (Keyboard::isKeyPressed(Keyboard::Down))
 			(*secondPlayer).setdy(0.1);
 
-		(*firstPlayer).update(dt, *classicMap, (*secondPlayer).isLose());
-		(*secondPlayer).update(dt, *classicMap, (*firstPlayer).isLose());
+		(*firstPlayer).update(dt, *classicMap, *secondPlayer);
+		(*secondPlayer).update(dt, *classicMap, *firstPlayer);
 
 		bombIt = bombVector.begin();
 		while (bombIt != bombVector.end())

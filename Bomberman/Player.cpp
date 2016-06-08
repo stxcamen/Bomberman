@@ -2,8 +2,11 @@
 #include "Player.h"
 #define INIT_EX_POWER 1
 #define INIT_SPEED 1.5
-#define INIT_BOMB_TIMER 1800.0
+#define INIT_BOMB_TIMER 2000.0
 #define INIT_RELOADING_TIME 3000.0
+#define RELOADING_TIME_LIMIT 500.0
+#define BOMB_TIMER_LIMIT 1000.0
+#define TIME_UP 500.0
 #define ANIMATION_SPEED 0.005
 #define GO_LEFT IntRect(48 * (int)currentFrame, 64, 48, 60)
 #define GO_RIGHT IntRect(48 + 48 * (int)currentFrame, 64, -48, 60)
@@ -34,7 +37,7 @@ Player::Player(Texture &mighty, int x, int y)
 	physRect = FloatRect(x * TILE_SIZE + 14, y * TILE_SIZE + 42, 20, 16);
 }
 
-void Player::setPowerUp(Map &map, char mapTile)
+void Player::setPowerUp(char mapTile)
 {
 	if(mapTile == '6')
 	{
@@ -51,30 +54,33 @@ void Player::setPowerUp(Map &map, char mapTile)
 		explosionPower += 1;
 	else if (mapTile = '2')
 	{
-		if (reloadingTime > 500.0)
-			reloadingTime -= 500.0;
+		if (reloadingTime > RELOADING_TIME_LIMIT)
+			reloadingTime -= TIME_UP;
 	}
 	else if (mapTile == '1')
 	{
-		if (bombTimer > 1000.0)
-			bombTimer -= 500.0;
+		if (bombTimer > BOMB_TIMER_LIMIT)
+			bombTimer -= TIME_UP;
 	}
 }
 
-void Player::bombCollision(Map &map)
+void Player::bombCollision(Map &map, Player &enemy)
 {
 	if (!physRect.intersects(lastBomb) && (lastBomb.top != 0))
 	{
-		map.setTile('Q', lastBomb.top / TILE_SIZE, lastBomb.left / TILE_SIZE);
+		if (lastBomb.intersects(FloatRect(enemy.getPlayerX() * TILE_SIZE, enemy.getPlayerY() * TILE_SIZE, TILE_SIZE, TILE_SIZE)))
+			enemy.setLastBomb(lastBomb);
+		else
+			map.setTile('Q', lastBomb.top / TILE_SIZE, lastBomb.left / TILE_SIZE);
 		lastBomb = FloatRect(0, 0, 0, 0);
 	}
 }
 
-void Player::collision(Map &map, bool enemyLose)
+void Player::collision(Map &map, Player &enemy)
 {
 	char mapTile;
 
-	if (enemyLose)
+	if(enemy.isLose())
 	{
 		isWon = true;
 		currentFrame = 0;
@@ -99,7 +105,7 @@ void Player::collision(Map &map, bool enemyLose)
 			else if (mapTile >= '1' && mapTile <= '6')
 			{
 				map.setTile(' ', i, j);
-				setPowerUp(map, mapTile);
+				setPowerUp(mapTile);
 			}
 			else if ((mapTile == 'F') || (mapTile == 'E'))
 			{
@@ -108,10 +114,10 @@ void Player::collision(Map &map, bool enemyLose)
 				speed = INIT_SPEED;
 			}
 		}
-	bombCollision(map);
+	bombCollision(map, enemy);
 }
 
-void Player::update(float dt, Map &map, bool enemyLose)
+void Player::update(float dt, Map &map, Player &enemy)
 {
 	currentFrame += ANIMATION_SPEED * speed * dt;
 
@@ -153,10 +159,15 @@ void Player::update(float dt, Map &map, bool enemyLose)
 	}
 
 	if( isAlive && !isWon)
-		collision(map, enemyLose);
+		collision(map, enemy);
 	
 	playerSprite.setPosition(physRect.left - 14, physRect.top - 42);
 	dx = dy = 0;
+}
+
+void Player::setLastBomb(FloatRect lastBomb)
+{
+	this->lastBomb = lastBomb;
 }
 
 void Player::bombPlanted(Map &map, float timeNow)
