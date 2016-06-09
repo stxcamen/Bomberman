@@ -7,6 +7,8 @@
 #define POWER_UP IntRect(((int)mapArray[i][j] - (int)'0' - 1) * TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE)
 
 
+using namespace sf;
+
 Map::Map( String mapArray[HEIGHT], Texture &mapTexture)
 {
 	for (int i = 0; i < HEIGHT; i++)

@@ -9,6 +9,9 @@
 #define FIRE_BRICK IntRect(0, 0, TILE_SIZE, TILE_SIZE)
 
 
+using namespace sf;
+using namespace std;
+
 Explosion::Explosion(Texture &brick, Texture &fire, Map &map, vector <Bomb*> &bombVector, int exPower, float timeNow, int x, int y)
 {
 	this->exPower = exPower;
@@ -69,6 +72,7 @@ bool Explosion::fireSpread(Texture &brick, Texture &fire, Map &map, vector <Bomb
 void Explosion::update( float timeNow )
 {
 	IntRect tempRect;
+
 	if((timeNow - startTime) >= (3.0 * exTime / 4) )
 		for (spriteIt = spriteVector.begin(); spriteIt != spriteVector.end(); spriteIt++)
 		{

@@ -7,7 +7,6 @@
 #include "Map.h"
 #include "Bomb.h"
 #include "Explosion.h"
-//#include "SFML\System.hpp"
 
 
 using namespace sf;
@@ -65,10 +64,10 @@ int main()
 	Player* secondPlayer = new Player(yellowMighty, 23, 12);
 	Map* classicMap = new Map(mapClassic, map);
 
-	vector <Bomb*> bombVector;
-	vector <Bomb*> ::iterator bombIt;
+	std::vector <Bomb*> bombVector;
+	std::vector <Bomb*> ::iterator bombIt;
 	bombVector.clear();
-	vector <Explosion*> exVector;
+	std::vector <Explosion*> exVector;
 	vector <Explosion*> ::iterator exIt;
 	exVector.clear();
 

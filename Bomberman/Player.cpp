@@ -21,6 +21,8 @@
 #define UP_FRAMES 6
 
 
+using namespace sf;
+
 Player::Player(Texture &mighty, int x, int y)
 {
 	isWon = false;

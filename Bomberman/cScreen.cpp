@@ -1,7 +1,6 @@
 #include "cScreen.h"
 
 
-
 cScreen::cScreen()
 {
 }

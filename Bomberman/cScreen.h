@@ -1,14 +1,12 @@
 #pragma once
-#include "Bomb.h"
+#include "Map.h"
 
-
-using namespace sf;
 
 class cScreen
 {
 public:
 	cScreen();
-	virtual int Run(RenderWindow &App) = 0;
+	virtual int Run(sf::RenderWindow &App) = 0;
 	~cScreen();
 };
 

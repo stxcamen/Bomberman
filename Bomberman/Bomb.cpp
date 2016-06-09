@@ -1,10 +1,11 @@
 #pragma once
 #include "Bomb.h"
-#include "Map.h"
 #define FIRST_FRAME IntRect(0, 0, 50, 44)
 #define SECOND_FRAME IntRect(50, 0, 50, 44)
 #define THIRD_FRAME IntRect(100, 0, 50, 44)
 
+
+using namespace sf;
 
 Bomb::Bomb(Texture &bomb, int exPower, float timePlanted, float bombTimer, int x, int y)
 {
