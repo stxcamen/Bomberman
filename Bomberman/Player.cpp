@@ -1,9 +1,10 @@
 #pragma once
 #include "Player.h"
+
 #define INIT_EX_POWER 1
 #define INIT_SPEED 1.5
-#define INIT_BOMB_TIMER 2000.0
-#define INIT_RELOADING_TIME 3000.0
+#define INIT_BOMB_TIMER 3000.0
+#define INIT_RELOADING_TIME 3500.0
 #define RELOADING_TIME_LIMIT 500.0
 #define BOMB_TIMER_LIMIT 1000.0
 #define TIME_UP 500.0
@@ -57,7 +58,7 @@ void Player::setPowerUp(char mapTile)
 	else if (mapTile = '2')
 	{
 		if (reloadingTime > RELOADING_TIME_LIMIT)
-			reloadingTime -= TIME_UP;
+			reloadingTime -= 3 * TIME_UP;
 	}
 	else if (mapTile == '1')
 	{

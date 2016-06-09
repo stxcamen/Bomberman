@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML\Graphics.hpp"
+
 #define TILE_SIZE 64
 #define HEIGHT 14
 #define WIDTH 25

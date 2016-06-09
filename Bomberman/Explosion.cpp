@@ -1,4 +1,5 @@
 #include "Explosion.h"
+
 #define PLUS_X 128
 #define MINUS_X 0
 #define PLUS_Y 384
@@ -39,7 +40,7 @@ bool Explosion::fireSpread(Texture &brick, Texture &fire, Map &map, vector <Bomb
 {
 
 		char ch = map.getTile( y, x );
-		if ((ch == ' ') || (ch == 'E'))
+		if ((ch == ' ') || (ch == 'E') || (ch == 'L'))
 		{
 			if (i == exPower)
 				spriteVector.push_back(new Sprite(fire, FIRE_END));

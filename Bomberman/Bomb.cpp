@@ -1,5 +1,6 @@
 #pragma once
 #include "Bomb.h"
+
 #define FIRST_FRAME IntRect(0, 0, 50, 44)
 #define SECOND_FRAME IntRect(50, 0, 50, 44)
 #define THIRD_FRAME IntRect(100, 0, 50, 44)

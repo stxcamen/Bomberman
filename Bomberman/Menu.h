@@ -10,6 +10,7 @@
 #define INTERVAL 70
 #define MAIN_FONT "fonts\\Boomboom.ttf"
 
+
 struct MenuPoint
 {
 	sf::Text text;

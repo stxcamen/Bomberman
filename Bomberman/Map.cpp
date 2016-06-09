@@ -1,5 +1,6 @@
 #pragma once
 #include "Map.h"
+
 #define GROUND IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE)
 #define BLOCK IntRect(0, 0, TILE_SIZE, TILE_SIZE)
 #define BRICK IntRect(TILE_SIZE, 0, TILE_SIZE, TILE_SIZE)
@@ -32,7 +33,7 @@ void Map::draw( RenderWindow &window)
 				sprite.setPosition(j * TILE_SIZE, i * TILE_SIZE);
 				window.draw(sprite);
 			} 
-			else if ((mapArray[i][j] == ' ') || (mapArray[i][j] == 'Q') || (mapArray[i][j] == 'E') || (mapArray[i][j] == 'F'))
+			else if ((mapArray[i][j] == ' ') || (mapArray[i][j] == 'Q') || (mapArray[i][j] == 'E') || (mapArray[i][j] == 'F') || (mapArray[i][j] == 'L'))
 			{
 				sprite = Sprite(mapTexture, GROUND);
 				sprite.setPosition(j * TILE_SIZE, i * TILE_SIZE);

@@ -29,9 +29,9 @@ GameScreen::GameScreen(String mapClassic[HEIGHT]) {
 }
 
 void GameScreen::initGame() {
-	firstPlayer = new Player(pinkMighty, 1, 2);
+	firstPlayer = new Player(pinkMighty, 1, 1);
 	secondPlayer = new Player(yellowMighty, 23, 12);
-	classicMap = new Map(mapString, map);
+	gameMap = new Map(mapString, map);
 }
 
 
@@ -49,13 +49,13 @@ int GameScreen::run(sf::RenderWindow &window) {
 	{
 		if (Keyboard::isKeyPressed(Keyboard::Space) && (*firstPlayer).isReloaded(timeNow))
 		{
-			(*firstPlayer).bombPlanted(*classicMap, timeNow);
+			(*firstPlayer).bombPlanted(*gameMap, timeNow);
 			bombVector.push_back(new Bomb(bomb, (*firstPlayer).getExPower(), timeNow, (*firstPlayer).getBombTimer(), (*firstPlayer).getPlayerX(), (*firstPlayer).getPlayerY()));
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::RControl) && (*secondPlayer).isReloaded(timeNow))
 		{
-			(*secondPlayer).bombPlanted(*classicMap, timeNow);
+			(*secondPlayer).bombPlanted(*gameMap, timeNow);
 			bombVector.push_back(new Bomb(bomb, (*secondPlayer).getExPower(), timeNow, (*secondPlayer).getBombTimer(), (*secondPlayer).getPlayerX(), (*secondPlayer).getPlayerY()));
 		}
 	}
@@ -78,21 +78,21 @@ int GameScreen::run(sf::RenderWindow &window) {
 	else if (Keyboard::isKeyPressed(Keyboard::Down))
 		(*secondPlayer).setdy(0.1);
 
-	(*firstPlayer).update(dt, *classicMap, *secondPlayer);
-	(*secondPlayer).update(dt, *classicMap, *firstPlayer);
+	(*firstPlayer).update(dt, *gameMap, *secondPlayer);
+	(*secondPlayer).update(dt, *gameMap, *firstPlayer);
 
 	bombIt = bombVector.begin();
 	while (bombIt != bombVector.end())
 		if ((*bombIt)->isExplode(timeNow))
 		{
-			exVector.push_back(new Explosion(fireBrick, fire, *classicMap, bombVector, (*bombIt)->getExPower(), timeNow, (*bombIt)->getBombX(), (*bombIt)->getBombY()));
+			exVector.push_back(new Explosion(fireBrick, fire, *gameMap, bombVector, (*bombIt)->getExPower(), timeNow, (*bombIt)->getBombX(), (*bombIt)->getBombY()));
 			bombIt = bombVector.erase(bombIt);
 		}
 		else
 			bombIt++;
 
 	for (exIt = exVector.begin(); exIt != exVector.end(); exIt++)
-		if ((*exIt)->isInactive(*classicMap, timeNow))
+		if ((*exIt)->isInactive(*gameMap, timeNow))
 			(*exIt)->~Explosion();
 
 	for (bombIt = bombVector.begin(); bombIt != bombVector.end(); bombIt++)
@@ -101,7 +101,7 @@ int GameScreen::run(sf::RenderWindow &window) {
 	for (exIt = exVector.begin(); exIt != exVector.end(); exIt++)
 		(*exIt)->update(timeNow);
 
-	(*classicMap).draw(window);
+	(*gameMap).draw(window);
 
 	for (bombIt = bombVector.begin(); bombIt != bombVector.end(); bombIt++)
 		(*bombIt)->draw(window);
@@ -111,6 +111,8 @@ int GameScreen::run(sf::RenderWindow &window) {
 
 	(*firstPlayer).draw(window);
 	(*secondPlayer).draw(window);
+
+	(*gameMap).drawLeaves(window);
 
 	window.display();
 

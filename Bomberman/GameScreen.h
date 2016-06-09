@@ -15,7 +15,7 @@ private:
 	sf::Texture map;
 	Player* firstPlayer;
 	Player* secondPlayer;
-	Map* classicMap;
+	Map* gameMap;
 	sf::String mapString[HEIGHT];
 
 	std::vector <Bomb*> bombVector;
