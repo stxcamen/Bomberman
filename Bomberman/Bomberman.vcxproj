@@ -119,15 +119,23 @@
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="cScreen.cpp" />
     <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="GameoverScreen.cpp" />
+    <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="cScreen.h" />
     <ClInclude Include="Explosion.h" />
+    <ClInclude Include="GameoverScreen.h" />
+    <ClInclude Include="GameScreen.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
