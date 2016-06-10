@@ -19,25 +19,16 @@
     <Filter Include="Source Files\Screens">
       <UniqueIdentifier>{121b0aaf-4f8d-47fe-8618-62e5428335b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{53a331ad-50ae-4469-9c01-c3ccb25a359b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{1fd60479-1b9b-4415-99d8-c49c53fb2bb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Explosion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bomb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cScreen.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameScreen.cpp">
       <Filter>Source Files\Screens</Filter>
@@ -51,23 +42,23 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>Source Files\Screens</Filter>
     </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="cScreen.cpp">
+      <Filter>Source Files\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bomb.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Explosion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cScreen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameScreen.h">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
@@ -79,6 +70,21 @@
     </ClInclude>
     <ClInclude Include="MainMenu.h">
       <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="cScreen.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
