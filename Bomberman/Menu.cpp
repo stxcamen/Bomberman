@@ -46,7 +46,6 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
 
 	for (std::vector<MenuPoint>::iterator it = menuPoints.begin(); it != menuPoints.end(); it++) {
 		(*it).text.setFont(font);
-		//(*it).text.setCharacterSize(MENU_POINT_SIZE);
 		(*it).text.setPosition((*it).pos.x + menuPos.x, (*it).pos.y + menuPos.y);
 		align(*it);
 	}
@@ -62,7 +61,7 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
 			}
 		}
 
-		if (Keyboard::isKeyPressed(Keyboard::Return)) {
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
 			return EXIT;
 		}
 

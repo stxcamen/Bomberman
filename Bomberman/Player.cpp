@@ -50,7 +50,7 @@ void Player::setPowerUp(char mapTile)
 		reloadingTime = INIT_RELOADING_TIME;
 	}
 	else if (mapTile == '5')
-		speed = INIT_SPEED;
+		speed /= 2;
 	else if (mapTile == '4')
 		speed += INIT_SPEED / 2;
 	else if (mapTile == '3')
